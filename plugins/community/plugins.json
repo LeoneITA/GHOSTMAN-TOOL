@@ -1,4 +1,19 @@
 {
   "discordInvite": "https://discord.gg/dZughrwXjq",
-  "plugins": []
+  "plugins": [
+    {
+      "id": "mio-plugin",
+      "name": "Mio Plugin",
+      "version": "1.0.0",
+      "category": "Utility",
+      "description": "Descrivi brevemente cosa fa.",
+      "minAppVersion": "1.1.0",
+      "authorName": "ghostman.__",
+      "authorDiscordId": "1127667290347946125",
+      "discordMessage": "https://discord.com/channels/1322178322192662549/1563168078760644618/1563168240107257876",
+      "videoUrl": "https://cdn.discordapp.com/attachments/1329567193540722799/1466383615511367813/W2QQ4Mo.mp4?ex=6adc8c2a&is=6adb3aaa&hm=fbe194611d73efc85bd192723fe74f1c78f7f3260aef0a7462b0cad6fca7e325&",
+      "downloadUrl": "https://cdn.discordapp.com/attachments/1563168078760644618/1563168239322927134/34kfm7d.zip?ex=6adca55e&is=6adb53de&hm=42494ca79fd67ef70ffcf4b56a29d3486458f1cbad2d335aa65c50f99f700a63&"
+    },
+    {}
+  ]
 }

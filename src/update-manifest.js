@@ -47,6 +47,19 @@ function getUpdateFileUrl(repository, version, file) {
   return `https://github.com/${repository}/releases/download/v${version}/${file}`;
 }
 
+function getInstallerDownloadUrl(repository, version) {
+  if (
+    typeof repository !== "string" ||
+    !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repository) ||
+    typeof version !== "string" ||
+    !versionPattern.test(version)
+  ) {
+    throw new Error("Percorso del pacchetto di aggiornamento non valido.");
+  }
+
+  return `https://github.com/${repository}/releases/download/v${version}/GHOSTMAN-Setup.exe`;
+}
+
 function getPublishedReleaseAssetUrl(release, repository, version, file) {
   if (
     !release ||
@@ -156,6 +169,7 @@ function isTrustedUpdateFileUrl(value, repository, version, file) {
 
 module.exports = {
   getUpdateFileUrl,
+  getInstallerDownloadUrl,
   getPublishedReleaseAssetUrl,
   parseReleaseVersion,
   getPublishedInstallerUrl,

@@ -1,6 +1,7 @@
 const assert = require("node:assert/strict");
 const { test } = require("node:test");
 const {
+  getInstallerDownloadUrl,
   getPublishedReleaseAssetUrl,
   getPublishedInstallerUrl,
   isTrustedUpdateFileUrl,
@@ -8,6 +9,17 @@ const {
   parseReleaseVersion,
   parseUpdateManifest,
 } = require("../src/update-manifest");
+
+test("builds a version-specific installer URL without using the GitHub API", () => {
+  assert.equal(
+    getInstallerDownloadUrl("LeoneITA/GHOSTMAN-TOOL", "1.1.10"),
+    "https://github.com/LeoneITA/GHOSTMAN-TOOL/releases/download/v1.1.10/GHOSTMAN-Setup.exe",
+  );
+  assert.throws(
+    () => getInstallerDownloadUrl("LeoneITA/GHOSTMAN-TOOL", "../latest"),
+    /Percorso del pacchetto/,
+  );
+});
 
 test("parses a version manifest with a changelog and matching portable EXE", () => {
   assert.deepEqual(

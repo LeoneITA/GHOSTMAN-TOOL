@@ -13,7 +13,7 @@
       "label": "Testo da analizzare",
       "type": "text",
       "required": true,
-      "placeholder": "Ciao GHOSTMAN"
+      "placeholder": "Ciao da GHOSTMAN"
     }
   ]
 }

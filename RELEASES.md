@@ -2,7 +2,7 @@
 
 ## Come cambiare versione
 
-Le versioni seguono il formato `MAJOR.MINOR.PATCH`, per esempio `1.1.10`.
+Le versioni seguono il formato `MAJOR.MINOR.PATCH`, per esempio `1.1.12`.
 `update/version.json` è la fonte del numero richiesto per la prossima release.
 Non è necessario scegliere una versione in `package.json`: Actions lo
 aggiorna per la build in modo che corrisponda al JSON.
@@ -12,12 +12,12 @@ Per chiedere una versione specifica:
 1. Controlla **LeoneITA/GHOSTMAN-TOOL → Releases** e apri
    `update/version.json`. Imposta
    `version` a un numero maggiore dell'ultima Release, per esempio
-   `1.1.9` → `1.1.10`.
+   `1.1.11` → `1.1.12`.
 2. Salva, fai commit e push delle modifiche sul branch `main`.
 3. Apri **LeoneITA/GHOSTMAN-TOOL → Actions → Build and publish GHOSTMAN** e controlla che il
    workflow termini con successo.
 4. Apri **LeoneITA/GHOSTMAN-TOOL → Releases** e verifica che siano presenti il tag
-   `v1.1.10`, `GHOSTMAN-Setup.exe` e `latest.yml`. Solo dopo la pubblicazione
+   `v1.1.12`, `GHOSTMAN-Setup.exe` e `latest.yml`. Solo dopo la pubblicazione
    l'app installata può rilevare e scaricare l'aggiornamento.
 
 Se il numero nel JSON è uguale o inferiore all'ultima Release, oppure è già
@@ -53,9 +53,9 @@ Release con tag corrispondente `vX.Y.Z`. La versione deve essere maggiore
 dell'ultima release pubblicata.
 
 GHOSTMAN legge `update/version.json` dal branch `main` all'avvio e ogni quattro
-ore. Se la versione è maggiore di quella installata, controlla la Release con
-lo stesso tag e mostra l'aggiornamento quando `GHOSTMAN-Setup.exe` è
-disponibile. Nelle build installate l'installer viene scaricato in background
+ore. Se la versione è maggiore di quella installata, controlla direttamente
+l'URL dell'installer nella Release con lo stesso tag, senza dipendere dalla
+quota dell'API GitHub. Nelle build installate l'installer viene scaricato in background
 e può essere installato dalla pagina **Aggiornamenti** o alla chiusura
 dell'app. Il pulsante manuale di controllo ricontrolla il manifest.
 

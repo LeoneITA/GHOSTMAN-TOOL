@@ -12,9 +12,8 @@ const {
   parseCommunityInstallUrl,
 } = require("./community-download");
 const {
-  getPublishedInstallerUrl,
+  getInstallerDownloadUrl,
   isTrustedInstallerUrl,
-  parseReleaseVersion,
   parseUpdateManifest,
 } = require("./update-manifest");
 
@@ -143,18 +142,16 @@ async function checkLatestReleaseUpdate() {
     return updateState;
   }
 
-  const tag = `v${manifest.version}`;
-  const response = await fetch(
-    `https://api.github.com/repos/${updateRepository}/releases/tags/${tag}`,
-    {
-      headers: {
-        Accept: "application/vnd.github+json",
-        "User-Agent": "GHOSTMAN-Desktop",
-      },
-      cache: "no-store",
-      signal: AbortSignal.timeout(10_000),
-    },
+  const downloadUrl = getInstallerDownloadUrl(
+    updateRepository,
+    manifest.version,
   );
+  const response = await fetch(downloadUrl, {
+    method: "HEAD",
+    headers: { "User-Agent": "GHOSTMAN-Desktop" },
+    cache: "no-store",
+    signal: AbortSignal.timeout(10_000),
+  });
   if (response.status === 404) {
     const manifestUpdate = {
       status: "preparing",
@@ -178,25 +175,17 @@ async function checkLatestReleaseUpdate() {
     return updateState;
   }
   if (!response.ok) {
-    throw new Error(`GitHub ha risposto con errore HTTP ${response.status}.`);
-  }
-
-  const release = await response.json();
-  const releaseInfo = parseReleaseVersion(release);
-  if (releaseInfo.version !== manifest.version) {
     throw new Error(
-      "La release GitHub non corrisponde alla versione dichiarata in update/version.json.",
+      `Il download della release GitHub ha risposto con errore HTTP ${response.status}.`,
     );
   }
-  const downloadUrl = available
-    ? getPublishedInstallerUrl(release, updateRepository, releaseInfo.version)
-    : "";
+
   const manifestUpdate = {
-    status: available ? (downloadUrl ? "available" : "preparing") : "not-available",
+    status: "available",
     available,
-    ready: Boolean(downloadUrl),
+    ready: true,
     version: manifest.version,
-    notes: manifest.notes || releaseInfo.notes,
+    notes: manifest.notes,
     downloadUrl,
     error: "",
   };
@@ -204,12 +193,8 @@ async function checkLatestReleaseUpdate() {
 
   if (isPortable) {
     publishUpdateState({
-      status: available
-        ? downloadUrl
-          ? "available"
-          : "preparing"
-        : "not-available",
-      version: available ? releaseInfo.version : app.getVersion(),
+      status: "available",
+      version: manifest.version,
       notes: available ? manifestUpdate.notes : "",
       downloadUrl: manifestUpdate.downloadUrl,
       error: "",
