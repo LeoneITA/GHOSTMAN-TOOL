@@ -1,0 +1,111 @@
+name: Build and publish GHOSTMAN
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ghostman-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - name: Check out source revision
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Read version from update manifest
+        id: version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
+        run: |
+          $manifest = Get-Content update/version.json -Raw | ConvertFrom-Json
+          $versionText = [string]$manifest.version
+          if ($versionText -notmatch '^\d+\.\d+\.\d+$') {
+            throw "update/version.json deve contenere una versione MAJOR.MINOR.PATCH valida."
+          }
+
+          $releaseOutput = gh release list --limit 1000 --json tagName
+          if ($LASTEXITCODE -ne 0) { throw "Impossibile leggere le release esistenti." }
+          $releases = @($releaseOutput | ConvertFrom-Json)
+          $existingRelease = @($releases | Where-Object { $_.tagName -eq "v$versionText" })
+          if ($existingRelease.Count -gt 0) {
+            Write-Host "La Release v$versionText esiste già. Nessuna nuova build necessaria."
+            "version=$versionText" >> $env:GITHUB_OUTPUT
+            "should_release=false" >> $env:GITHUB_OUTPUT
+            exit 0
+          }
+
+          $publishedVersions = @(
+            $releases |
+              ForEach-Object {
+                if ($_.tagName -match '^v(\d+\.\d+\.\d+)$') {
+                  [version]$Matches[1]
+                }
+              } |
+              Sort-Object
+          )
+          $requestedVersion = [version]$versionText
+          if ($publishedVersions.Count -gt 0 -and $requestedVersion -le $publishedVersions[-1]) {
+            throw "La versione $versionText in update/version.json deve essere maggiore dell'ultima Release ($($publishedVersions[-1])). Modifica update/version.json e riprova."
+          }
+
+          $currentPackage = [string](Get-Content package.json -Raw | ConvertFrom-Json).version
+          if ($currentPackage -ne $versionText) {
+            npm version $versionText --no-git-tag-version
+            if ($LASTEXITCODE -ne 0) { throw "Impossibile aggiornare la versione del pacchetto." }
+          }
+          "version=$versionText" >> $env:GITHUB_OUTPUT
+          "should_release=true" >> $env:GITHUB_OUTPUT
+
+      - name: Install dependencies
+        if: steps.version.outputs.should_release == 'true'
+        run: npm ci
+
+      - name: Test remote access and pairing
+        if: steps.version.outputs.should_release == 'true'
+        run: npm test
+
+      - name: Clean output and build installer
+        if: steps.version.outputs.should_release == 'true'
+        shell: pwsh
+        run: |
+          if (Test-Path -LiteralPath "dist") {
+            Remove-Item -LiteralPath "dist" -Recurse -Force
+          }
+          npx electron-builder --win nsis --publish never
+          if ($LASTEXITCODE -ne 0) { throw "Build installer non riuscita." }
+
+      - name: Publish installer GitHub Release
+        if: steps.version.outputs.should_release == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $assetPaths = @(
+            (Join-Path "dist" "GHOSTMAN-Setup.exe")
+            (Join-Path "dist" "GHOSTMAN-Setup.exe.blockmap")
+            (Join-Path "dist" "latest.yml")
+          )
+          $assets = foreach ($name in $assetPaths) {
+            if (-not (Test-Path $name -PathType Leaf)) {
+              throw "Asset di release mancante: $name"
+            }
+            (Resolve-Path $name).Path
+          }
+          gh release create "v$version" @assets --title "GHOSTMAN $version" --generate-notes --target $env:GITHUB_SHA
+          if ($LASTEXITCODE -ne 0) { throw "Pubblicazione GitHub Release non riuscita." }
