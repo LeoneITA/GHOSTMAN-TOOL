@@ -242,6 +242,7 @@ function initializeAutoUpdates() {
 
   autoUpdater.autoDownload = true;
   autoUpdater.autoInstallOnAppQuit = true;
+  autoUpdater.autoRunAppAfterInstall = true;
   autoUpdater.on("checking-for-update", () => {
     publishUpdateState({ status: "checking", error: "", progress: 0 });
   });
@@ -454,7 +455,7 @@ ipcMain.handle("ghostman:install-update", () => {
   if (isDev || isPortable || updateState.status !== "downloaded") {
     throw new Error("Non c'è un aggiornamento installabile in questa sessione.");
   }
-  autoUpdater.quitAndInstall();
+  autoUpdater.quitAndInstall(false, true);
 });
 ipcMain.handle("ghostman:download-update-installer", async () => {
   const downloadUrl = updateState.manifestUpdate.available &&

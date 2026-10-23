@@ -630,7 +630,7 @@ function renderUpdateState(update) {
       : "L'aggiornamento si sta scaricando in background.",
     downloading: `Scaricamento in corso: ${update.progress}%.`,
     downloaded:
-      "Il pacchetto è pronto. Puoi installarlo ora oppure verrà installato alla chiusura dell'app.",
+      "La nuova versione completa è pronta. Premi «Installa aggiornamento e riavvia GHOSTMAN» per sostituire la build attuale e riaprire l'app.",
     "not-available": `Hai già l'ultima versione disponibile (v${update.version}).`,
     error: update.error || "Riprova più tardi.",
   };

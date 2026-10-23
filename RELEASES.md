@@ -2,7 +2,7 @@
 
 ## Come cambiare versione
 
-Le versioni seguono il formato `MAJOR.MINOR.PATCH`, per esempio `1.1.7`.
+Le versioni seguono il formato `MAJOR.MINOR.PATCH`, per esempio `1.1.10`.
 `update/version.json` è la fonte del numero richiesto per la prossima release.
 Non è necessario scegliere una versione in `package.json`: Actions lo
 aggiorna per la build in modo che corrisponda al JSON.
@@ -12,12 +12,12 @@ Per chiedere una versione specifica:
 1. Controlla **LeoneITA/GHOSTMAN-TOOL → Releases** e apri
    `update/version.json`. Imposta
    `version` a un numero maggiore dell'ultima Release, per esempio
-   `1.1.7` → `1.1.8`.
+   `1.1.9` → `1.1.10`.
 2. Salva, fai commit e push delle modifiche sul branch `main`.
 3. Apri **LeoneITA/GHOSTMAN-TOOL → Actions → Build and publish GHOSTMAN** e controlla che il
    workflow termini con successo.
 4. Apri **LeoneITA/GHOSTMAN-TOOL → Releases** e verifica che siano presenti il tag
-   `v1.1.8`, `GHOSTMAN-Setup.exe` e `latest.yml`. Solo dopo la pubblicazione
+   `v1.1.10`, `GHOSTMAN-Setup.exe` e `latest.yml`. Solo dopo la pubblicazione
    l'app installata può rilevare e scaricare l'aggiornamento.
 
 Se il numero nel JSON è uguale o inferiore all'ultima Release, oppure è già
@@ -77,8 +77,10 @@ comunque una nuova release, avvia il workflow da **Actions → Run workflow**.
 - L'installer NSIS controlla le Release all'avvio e poi ogni quattro ore.
 - Il pallino in **Aggiornamenti** appare per una versione pubblicata più nuova;
   il changelog della Release è mostrato come testo.
-- Il pacchetto viene scaricato automaticamente e si installa alla chiusura
-  dell'app, oppure subito premendo il pulsante d'installazione.
+- Premendo **Controlla aggiornamenti**, la build installata scarica il pacchetto
+  completo in background. Quando è pronto, premi **Installa aggiornamento e
+  riavvia GHOSTMAN**: il setup sostituisce i file dell'app e riapre la nuova
+  versione. Non serve modificare o sostituire manualmente l'EXE.
 - La versione portatile distribuita in precedenza non può aggiornarsi da sola:
   esegui una volta il nuovo installer per passare alla versione installata.
 - Le Release GitHub sono la fonte ufficiale per il numero versione e per il
