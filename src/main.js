@@ -382,7 +382,8 @@ async function loadPlugins() {
           category: manifest.category || "Utility",
           runtime,
           remoteAllowed:
-            runtime === "python" && approvedPlugins.has(manifest.id),
+            ["python", "html"].includes(runtime) &&
+            approvedPlugins.has(manifest.id),
           inputs: Array.isArray(manifest.inputs)
             ? manifest.inputs.filter(
                 (input) =>
