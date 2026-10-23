@@ -1,0 +1,10 @@
+{
+  "id": "pyth",
+  "name": "TEST PYTHON",
+  "version": "1.2.0",
+  "description": "Plugin di esempio che riceve testo e restituisce un risultato.",
+  "category": "Python",
+  "apiVersion": 1,
+  "runtime": "python",
+  "entry": "test.py"
+}

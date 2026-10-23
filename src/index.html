@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none';"
+    />
+    <title>GHOSTMAN</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./render.js" defer></script>
+  </head>
+  <body>
+    <section
+      id="startup-intro"
+      class="startup-intro"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="intro-title"
+    >
+      <div class="intro-content">
+        <img
+          class="intro-avatar"
+          src="../assets/avatar.gif"
+          alt="Avatar animato GHOSTMAN"
+        />
+        <span class="intro-eyebrow">DESKTOP TOOLKIT</span>
+        <h1 id="intro-title">GHOSTMAN</h1>
+        <p>Strumenti, plugin e community. Un ecosistema in costruzione.</p>
+        <div class="intro-loader" aria-hidden="true">
+          <span></span>
+        </div>
+        <button id="intro-skip" class="intro-skip" type="button">
+          Entra nel workspace <span>↗</span>
+        </button>
+      </div>
+    </section>
+
+    <div class="app-shell">
+      <aside class="sidebar glass">
+        <div class="brand">
+          <img
+            class="brand-icon"
+            src="../assets/avatar.gif"
+            alt="Avatar GHOSTMAN"
+          />
+          <div>
+            <strong>GHOSTMAN</strong>
+            <span>DESKTOP TOOLKIT</span>
+          </div>
+        </div>
+
+        <div class="nav-label">WORKSPACE</div>
+
+        <button class="nav-item active" data-page="dashboard">
+          <span>◈</span> Dashboard
+        </button>
+        <button class="nav-item" data-page="tools">
+          <span>⌘</span> Toolkit
+        </button>
+        <button class="nav-item" data-page="plugins">
+          <span>▦</span> Plugin manager
+        </button>
+        <button class="nav-item" data-page="remote">
+          <span>▣</span> Accesso mobile
+        </button>
+
+        <div class="nav-label">SISTEMA</div>
+
+        <button class="nav-item" data-page="updates">
+          <span>↻</span> Aggiornamenti
+          <span
+            id="updates-indicator"
+            class="update-indicator hidden"
+            aria-label="Aggiornamento disponibile"
+          ></span>
+        </button>
+        <button class="nav-item" data-page="settings">
+          <span>⚙</span> Impostazioni
+        </button>
+
+        <div class="sidebar-bottom">
+          <div class="status-dot"></div>
+          <div>
+            <strong>Core online</strong>
+            <span id="sidebar-version">GHOSTMAN v0.3.5</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar">
+          <div class="breadcrumbs">
+            GHOSTMAN <span>/</span> <b id="page-name">Dashboard</b>
+          </div>
+          <div class="topbar-right">
+            <span class="system-label">LOCAL ENVIRONMENT</span>
+            <div class="avatar">GM</div>
+          </div>
+        </header>
+
+        <section class="page" id="page-dashboard">
+          <div class="hero">
+            <div>
+              <div class="eyebrow">YOUR WORKSPACE</div>
+              <h1>Welcome to <span>GHOSTMAN.</span></h1>
+              <p>Un unico spazio per i tuoi strumenti digitali.</p>
+            </div>
+            <div class="hero-mark">G<span>.</span></div>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card glass">
+              <span class="stat-label">TOOL REGISTRATI</span>
+              <strong id="stat-tools">0</strong>
+              <span class="stat-caption">Strumenti disponibili</span>
+            </article>
+            <article class="stat-card glass">
+              <span class="stat-label">VERSIONE</span>
+              <strong id="dashboard-version">0.3.5</strong>
+              <span class="stat-caption">Early development</span>
+            </article>
+            <article class="stat-card glass">
+              <span class="stat-label">STATO</span>
+              <strong class="state-online">ONLINE</strong>
+              <span class="stat-caption">Core locale avviato</span>
+            </article>
+          </div>
+
+          <div class="section-heading">
+            <div>
+              <h2>Quick access</h2>
+              <p>Apri rapidamente uno dei tuoi strumenti.</p>
+            </div>
+            <button class="text-button" data-goto="tools">
+              Tutti gli strumenti ↗
+            </button>
+          </div>
+
+          <div class="tool-grid" id="quick-tools"></div>
+        </section>
+
+        <section class="page hidden" id="page-tools">
+          <div class="page-heading">
+            <div class="eyebrow">WORKSPACE / TOOLS</div>
+            <h1>Toolkit</h1>
+            <p>Strumenti modulari disponibili in locale.</p>
+          </div>
+          <div class="search-wrap glass">
+            <span>⌕</span>
+            <input
+              id="tool-search"
+              type="search"
+              placeholder="Cerca uno strumento..."
+            />
+            <kbd>SEARCH</kbd>
+          </div>
+          <div class="tool-grid" id="all-tools"></div>
+        </section>
+
+        <section class="page hidden" id="page-plugins">
+          <div class="page-heading">
+            <div class="eyebrow">EXTENSIONS</div>
+            <h1>Plugin manager</h1>
+            <p>Gestisci i plugin e i file di prova sul tuo PC.</p>
+          </div>
+          <div class="panel glass">
+            <div class="panel-heading">
+              <h2>Plugin installati</h2>
+              <div class="community-file-actions">
+                <button id="import-community-plugin" class="tool-open" type="button">
+                  Installa plugin da cartella
+                </button>
+                <span class="pill">LOCAL</span>
+              </div>
+            </div>
+            <div id="plugin-list" class="plugin-list"></div>
+          </div>
+          <div class="panel glass">
+            <div class="panel-heading">
+              <div>
+                <h2>File e cartelle community sul PC</h2>
+                  <p>Importa file, cartelle o archivi ZIP/RAR. Le cartelle mostrate qui restano nella libreria; quelle con manifest.json possono essere installate come plugin Python. I siti con index.html si possono provare anche dal telefono.</p>
+              </div>
+              <button id="add-community-files" class="primary-button community-add" type="button">
+                + Importa file, cartella o archivio
+              </button>
+            </div>
+            <div id="community-file-list" class="plugin-list"></div>
+            <p id="community-file-status" class="notice" role="status"></p>
+          </div>
+          <p class="notice">
+            I plugin Python partono solo quando premi Esegui e operano con gli
+            stessi permessi dell'app. Installa soltanto codice di cui ti fidi.
+          </p>
+          <p class="notice">
+            I plugin Python scaricati devono essere estratti prima; poi premi
+            “Installa plugin da cartella” e seleziona la cartella contenente
+            manifest.json. Il codice può accedere ai file e alle risorse del
+            tuo account Windows: installa soltanto plugin verificati e fidati.
+          </p>
+          <p class="notice">
+            Per autorizzare un plugin sul telefono, abilita "Consenti remoto"
+            solo dopo averne verificato il codice.
+          </p>
+        </section>
+
+        <section class="page hidden" id="page-remote">
+          <div class="page-heading">
+            <div class="eyebrow">PRIVATE TAILNET</div>
+            <h1>Accesso mobile</h1>
+            <p>
+              Avvia i plugin approvati dal telefono, anche su rete mobile,
+              tramite la tua rete privata Tailscale.
+            </p>
+          </div>
+          <div class="panel glass">
+            <div class="panel-heading">
+              <h2 id="remote-title">Accesso remoto spento</h2>
+              <span id="remote-status-pill" class="pill">OFFLINE</span>
+            </div>
+            <p id="remote-status">
+              Installa Tailscale su questo PC e sul telefono e accedi allo
+              stesso tailnet. Non vengono aperte porte del router.
+            </p>
+            <div class="update-actions">
+              <button id="start-remote" class="primary-button" type="button">
+                Attiva accesso mobile
+              </button>
+              <button id="stop-remote" class="tool-open hidden" type="button">
+                Disattiva e revoca sessioni
+              </button>
+              <button id="open-tailscale" class="tool-open" type="button">
+                Scarica Tailscale ↗
+              </button>
+            </div>
+            <div id="remote-pairing" class="remote-pairing hidden">
+              <img id="remote-qr" class="remote-qr" alt="QR per associare il telefono" />
+              <div class="remote-pairing-info">
+                <strong>Scansiona entro <span id="pairing-countdown">60</span> secondi</strong>
+                <p>
+                  Il link vale per una sola associazione; la sessione viene
+                  legata all'account Tailscale e revocata quando disattivi il
+                  servizio o chiudi GHOSTMAN.
+                </p>
+                <input id="remote-link" class="remote-link" readonly aria-label="Link temporaneo per associare il telefono" />
+                <div class="update-actions">
+                  <button id="copy-remote-link" class="tool-open" type="button">
+                    Copia link
+                  </button>
+                  <button id="new-remote-link" class="tool-open" type="button">
+                    Genera nuovo link
+                  </button>
+                </div>
+              </div>
+            </div>
+            <p id="remote-error" class="remote-error hidden" role="alert"></p>
+            <button
+              id="open-serve-settings"
+              class="tool-open hidden"
+              type="button"
+            >
+              Apri impostazioni Tailscale Serve ↗
+            </button>
+          </div>
+          <div class="panel glass">
+            <h2>Prima di iniziare</h2>
+            <p>
+              Tailscale deve essere installato e connesso su PC e telefono
+              allo stesso tailnet. Abilita MagicDNS, certificati HTTPS e Serve
+              nelle impostazioni Tailscale. Il link QR scade dopo 60 secondi.
+              Il telefono vede solo plugin Python che approvi nel Plugin
+              manager; le esecuzioni vengono registrate senza salvare gli
+              input.
+            </p>
+            <p>
+              I plugin eseguono codice con i permessi del tuo account Windows.
+              Abilita il remoto solo per script fidati.
+            </p>
+          </div>
+        </section>
+
+        <section class="page hidden" id="page-updates">
+          <div class="page-heading">
+            <div class="eyebrow">SYSTEM</div>
+            <h1>Aggiornamenti</h1>
+            <p>Stato del framework di aggiornamento.</p>
+          </div>
+          <div class="panel glass">
+            <div class="update-symbol">↻</div>
+            <h2 id="update-title">Controllo aggiornamenti</h2>
+            <p id="update-status">Verifica in corso...</p>
+            <pre id="update-notes" class="update-notes hidden"></pre>
+            <div class="update-actions">
+              <button id="check-for-updates" class="tool-open" type="button">
+                Controlla aggiornamenti
+              </button>
+              <button
+                id="download-update-installer"
+                class="tool-open hidden"
+                type="button"
+              >
+                Scarica installer aggiornamento
+              </button>
+              <button
+                id="install-update"
+                class="primary-button hidden"
+                type="button"
+              >
+                Riavvia e installa aggiornamento <span>↗</span>
+              </button>
+            </div>
+            <span id="current-version" class="pill">LOCAL BUILD · v0.3.5</span>
+          </div>
+        </section>
+
+        <section class="page hidden" id="page-settings">
+          <div class="page-heading">
+            <div class="eyebrow">PREFERENCES</div>
+            <h1>Impostazioni</h1>
+            <p>Informazioni sull'ambiente locale.</p>
+          </div>
+          <div class="panel glass settings-row">
+            <div>
+              <h2>GHOSTMAN Desktop</h2>
+              <p>Interfaccia Liquid Glass · build <span id="settings-version">0.3.5</span></p>
+            </div>
+            <span class="pill">DEVELOPMENT</span>
+          </div>
+          <div class="panel glass">
+            <h2>Sicurezza</h2>
+            <p>
+              I plugin Python vengono eseguiti con i permessi del tuo account
+              Windows, senza sandbox. Avvia soltanto codice di cui ti fidi.
+            </p>
+          </div>
+        </section>
+
+        <section class="runner glass hidden" id="tool-runner">
+          <div class="runner-header">
+            <div>
+              <span class="eyebrow">TOOL CONSOLE</span>
+              <h2 id="runner-title">Tool</h2>
+            </div>
+            <button id="runner-close" class="icon-button" aria-label="Chiudi">
+              ×
+            </button>
+          </div>
+          <form id="runner-form">
+            <div id="runner-fields" class="runner-fields"></div>
+            <button class="primary-button" type="submit">
+              Esegui tool <span>↗</span>
+            </button>
+          </form>
+          <pre id="runner-output" class="output">
+Il risultato apparirà qui.</pre
+          >
+        </section>
+
+        <footer class="footer">
+          <span>GHOSTMAN © 2026</span>
+          <span>BUILT FOR MODULARITY</span>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>

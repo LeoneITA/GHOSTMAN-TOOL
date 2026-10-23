@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Plugin GHOSTMAN selezionati e verificati dalla community."
+    />
+    <meta name="theme-color" content="#0a0b0e" />
+    <title>GHOSTMAN · Community plugins</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: Inter, "Segoe UI", sans-serif;
+        color: #f4f5f7;
+        background: #090a0d;
+        font-synthesis: none;
+        --muted: #9297a3;
+        --line: rgba(255, 255, 255, 0.1);
+        --glass: rgba(255, 255, 255, 0.045);
+        --accent: #d9e0ec;
+      }
+
+      * { box-sizing: border-box; }
+      .hidden { display: none !important; }
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        margin: 0;
+        background:
+          radial-gradient(ellipse at 15% 0%, #9da9c21a, transparent 38%),
+          radial-gradient(ellipse at 95% 42%, #5f6f8810, transparent 34%),
+          #090a0d;
+      }
+      a { color: inherit; }
+      .shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+      .topbar {
+        display: flex;
+        height: 78px;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--line);
+      }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .brand-mark {
+        display: grid;
+        width: 36px;
+        height: 36px;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #ffffff08;
+        font-weight: 750;
+      }
+      .brand-name { font-size: 13px; font-weight: 750; letter-spacing: 2px; }
+      .brand-caption, .eyebrow {
+        color: var(--muted);
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 1.8px;
+        text-transform: uppercase;
+      }
+      .top-link {
+        color: #c6cad3;
+        font-size: 12px;
+        text-decoration: none;
+      }
+      .top-link:hover, .message-link:hover { color: white; }
+      .hero { max-width: 720px; padding: 82px 0 44px; }
+      .hero h1 {
+        margin: 15px 0 12px;
+        font-size: clamp(38px, 7vw, 68px);
+        font-weight: 650;
+        letter-spacing: -3px;
+        line-height: 1.02;
+      }
+      .hero h1 span { color: #aebbd1; }
+      .hero p {
+        max-width: 580px;
+        margin: 0;
+        color: #a5a9b3;
+        font-size: 15px;
+        line-height: 1.7;
+      }
+      .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin: 14px 0 18px;
+      }
+      .section-title { margin: 0; font-size: 18px; font-weight: 600; }
+      .search {
+        width: min(290px, 48%);
+        padding: 11px 13px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        outline: none;
+        background: #ffffff08;
+        color: inherit;
+      }
+      .search:focus { border-color: #aebbd17a; }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .card, .empty, .notice {
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        background: linear-gradient(145deg, #ffffff0a, #ffffff03);
+        box-shadow: 0 18px 50px #0002;
+      }
+      .card { display: flex; min-height: 250px; flex-direction: column; padding: 20px; }
+      .plugin-video {
+        width: 100%;
+        max-height: 230px;
+        margin-top: 15px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #000;
+        object-fit: contain;
+      }
+      .plugin-author { margin-top: 10px !important; color: #ccd7e8 !important; }
+      .card-top { display: flex; justify-content: space-between; gap: 10px; }
+      .category, .version {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: #b6bbc6;
+        font-size: 9px;
+        letter-spacing: 1px;
+        padding: 6px 9px;
+        text-transform: uppercase;
+      }
+      .verified { color: #cad8ee; }
+      .card h3 { margin: 20px 0 8px; font-size: 19px; font-weight: 620; }
+      .card p { margin: 0; color: #a2a6af; font-size: 12px; line-height: 1.65; }
+      .compat { margin-top: 12px !important; color: #757b88 !important; font-size: 10px !important; }
+      .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 20px; }
+      .button {
+        display: inline-flex;
+        min-height: 36px;
+        align-items: center;
+        justify-content: center;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        background: #ffffff08;
+        color: #f3f4f6;
+        font-size: 11px;
+        text-decoration: none;
+        transition: background 140ms ease, border-color 140ms ease;
+      }
+      .button:hover { border-color: #ffffff30; background: #ffffff12; }
+      .button.primary { border-color: #d9e0ec; background: #d9e0ec; color: #111318; font-weight: 700; }
+      .button.primary:hover { background: white; }
+      .button:focus-visible, .brand:focus-visible {
+        outline: 2px solid #b7c2d8;
+        outline-offset: 3px;
+      }
+      .empty { grid-column: 1 / -1; padding: 30px; text-align: center; }
+      .empty h3 { margin: 0 0 8px; font-size: 17px; }
+      .empty p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+      .message-link { display: inline-block; margin-top: 12px; color: #ccd7e8; font-size: 12px; }
+      .notice { margin: 30px 0 60px; padding: 18px 20px; }
+      .notice strong { display: block; margin-bottom: 7px; font-size: 12px; }
+      .notice p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.7; }
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 20px 0 28px;
+        border-top: 1px solid var(--line);
+        color: #6f7480;
+        font-size: 10px;
+      }
+      .error { color: #ffb4ae !important; }
+      @media (max-width: 800px) {
+        .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (max-width: 560px) {
+        .shell { width: min(100% - 28px, 440px); }
+        .topbar { height: 66px; }
+        .hero { padding: 62px 0 32px; }
+        .hero h1 { letter-spacing: -2px; }
+        .toolbar { align-items: stretch; flex-direction: column; }
+        .search { width: 100%; }
+        .grid { grid-template-columns: 1fr; }
+        .card { min-height: 220px; }
+        .footer { flex-direction: column; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="shell topbar">
+      <a
+        class="brand"
+        href="https://discord.gg/dZughrwXjq"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Apri il server Discord GHOSTMAN"
+      >
+        <span class="brand-mark">G</span>
+        <span>
+          <span class="brand-name">GHOSTMAN</span><br />
+          <span class="brand-caption">Community plugins</span>
+        </span>
+      </a>
+      <a
+        id="discord-top-link"
+        class="top-link hidden"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Discord ↗</a>
+    </header>
+
+    <main class="shell">
+      <section class="hero">
+        <div class="eyebrow">GHOSTMAN HUB / COMMUNITY</div>
+        <h1>Plugin scelti.<br /><span>Pronti da provare.</span></h1>
+        <p>
+          Una raccolta di plugin selezionati dal team GHOSTMAN. Ogni scheda
+          collega il pacchetto scaricabile alla discussione originale su Discord.
+        </p>
+      </section>
+
+      <section aria-labelledby="catalog-title">
+        <div class="toolbar">
+          <h2 id="catalog-title" class="section-title">Catalogo community</h2>
+          <input
+            id="plugin-search"
+            class="search"
+            type="search"
+            placeholder="Cerca un plugin..."
+            aria-label="Cerca un plugin"
+          />
+        </div>
+        <div id="plugin-grid" class="grid" aria-live="polite">
+          <section class="empty"><p>Caricamento catalogo...</p></section>
+        </div>
+      </section>
+
+      <aside class="notice">
+        <strong>Prima di installare</strong>
+        <p>
+          Premi <b>Installa con GHOSTMAN</b> per aprire l’app, scaricare il
+          pacchetto e chiedere conferma prima dell’installazione. GHOSTMAN deve
+          essere installato e il link può funzionare solo sui PC dove è
+          registrato. In alternativa, scarica ed estrai l’archivio e installalo
+          dal Plugin manager. I plugin Python non sono isolati: installa solo
+          codice di cui ti fidi.
+        </p>
+      </aside>
+    </main>
+
+    <footer class="shell footer">
+      <span>GHOSTMAN · Community plugins</span>
+      <span>La selezione e la verifica dei plugin è responsabilità del team GHOSTMAN.</span>
+    </footer>
+
+    <script>
+      const grid = document.querySelector("#plugin-grid");
+      const search = document.querySelector("#plugin-search");
+      const discordTopLink = document.querySelector("#discord-top-link");
+      let plugins = [];
+
+      function safeUrl(value, allowedHosts) {
+        try {
+          const url = new URL(value);
+          return url.protocol === "https:" && allowedHosts.includes(url.hostname)
+            ? url.href
+            : "";
+        } catch {
+          return "";
+        }
+      }
+
+      function safeArchiveUrl(value) {
+        const href = safeUrl(value, ["github.com", "cdn.discordapp.com"]);
+        if (!href) return "";
+        const url = new URL(href);
+        if (!/\.(zip|rar)$/i.test(url.pathname)) return "";
+        if (
+          url.hostname === "github.com" &&
+          !/\/releases\/download\//.test(url.pathname)
+        ) {
+          return "";
+        }
+        if (
+          url.hostname === "cdn.discordapp.com" &&
+          !/\/attachments\//.test(url.pathname)
+        ) {
+          return "";
+        }
+        return url.href;
+      }
+
+      function addLink(container, label, href, primary) {
+        if (!href) return;
+        const link = document.createElement("a");
+        link.className = primary ? "button primary" : "button";
+        link.href = href;
+        if (href.startsWith("https:")) {
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+        }
+        link.textContent = label;
+        container.append(link);
+      }
+
+      function installLink(plugin) {
+        const url = new URL("ghostman://install");
+        url.searchParams.set("id", plugin.id);
+        url.searchParams.set("url", plugin.downloadUrl);
+        return url.href;
+      }
+
+      function showEmpty(title, description, isError = false) {
+        const section = document.createElement("section");
+        section.className = "empty";
+        const heading = document.createElement("h3");
+        heading.textContent = title;
+        const body = document.createElement("p");
+        body.textContent = description;
+        if (isError) body.className = "error";
+        section.append(heading, body);
+        grid.replaceChildren(section);
+      }
+
+      function render() {
+        const query = search.value.trim().toLocaleLowerCase("it");
+        const filtered = plugins.filter((plugin) =>
+          `${plugin.name} ${plugin.description} ${plugin.category}`
+            .toLocaleLowerCase("it")
+            .includes(query),
+        );
+        if (!filtered.length) {
+          showEmpty(
+            query ? "Nessun risultato" : "Nessun plugin pubblicato ancora",
+            query
+              ? "Prova con un altro termine."
+              : "Il catalogo è in preparazione. I plugin approvati appariranno qui con il link al download e al messaggio Discord.",
+          );
+          return;
+        }
+
+        const cards = filtered.map((plugin) => {
+          const card = document.createElement("article");
+          card.className = "card";
+
+          const top = document.createElement("div");
+          top.className = "card-top";
+          const category = document.createElement("span");
+          category.className = "category";
+          category.textContent = plugin.category;
+          const version = document.createElement("span");
+          version.className = "version";
+          version.textContent = `v${plugin.version}`;
+          top.append(category, version);
+
+          const title = document.createElement("h3");
+          title.textContent = plugin.name;
+          const description = document.createElement("p");
+          description.textContent = plugin.description;
+          let author = null;
+          if (plugin.authorName) {
+            author = document.createElement("p");
+            author.className = "plugin-author";
+            if (/^\d{17,20}$/.test(plugin.authorDiscordId || "")) {
+              const ownerLink = document.createElement("a");
+              ownerLink.href = `https://discord.com/users/${plugin.authorDiscordId}`;
+              ownerLink.target = "_blank";
+              ownerLink.rel = "noopener noreferrer";
+              ownerLink.textContent = `@${plugin.authorName}`;
+              author.append("Autore: ", ownerLink);
+            } else {
+              author.textContent = `Autore: @${plugin.authorName}`;
+            }
+          }
+          let video = null;
+          const videoUrl = safeUrl(plugin.videoUrl, ["cdn.discordapp.com"]);
+          if (videoUrl && /\.(mp4|webm|mov)$/i.test(new URL(videoUrl).pathname)) {
+            video = document.createElement("video");
+            video.className = "plugin-video";
+            video.controls = true;
+            video.preload = "metadata";
+            video.src = videoUrl;
+            video.setAttribute("aria-label", `Video di presentazione: ${plugin.name}`);
+          }
+          const compatibility = document.createElement("p");
+          compatibility.className = "compat";
+          compatibility.textContent = `GHOSTMAN ${plugin.minAppVersion}+ · selezionato dal team`;
+
+          const actions = document.createElement("div");
+          actions.className = "actions";
+          addLink(
+            actions,
+            "Installa con GHOSTMAN",
+            installLink(plugin),
+            true,
+          );
+          addLink(
+            actions,
+            "Scarica archivio ↓",
+            safeArchiveUrl(plugin.downloadUrl),
+            false,
+          );
+          addLink(
+            actions,
+            "Apri post Discord ↗",
+            safeUrl(plugin.discordMessage, ["discord.com"]),
+            false,
+          );
+
+          card.append(top, title, description);
+          if (author) card.append(author);
+          if (video) card.append(video);
+          card.append(compatibility, actions);
+          return card;
+        });
+        grid.replaceChildren(...cards);
+      }
+
+      search.addEventListener("input", render);
+
+      fetch("./plugins.json", { cache: "no-store" })
+        .then((response) => {
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response.json();
+        })
+        .then((data) => {
+          if (
+            !data ||
+            typeof data !== "object" ||
+            !Array.isArray(data.plugins) ||
+            data.plugins.length > 500
+          ) {
+            throw new Error("Formato catalogo non valido");
+          }
+          plugins = data.plugins.filter(
+            (plugin) =>
+              plugin &&
+              typeof plugin.id === "string" &&
+              /^[a-z0-9][a-z0-9-]{0,63}$/.test(plugin.id) &&
+              typeof plugin.name === "string" &&
+              typeof plugin.version === "string" &&
+              typeof plugin.description === "string" &&
+              typeof plugin.category === "string" &&
+              typeof plugin.minAppVersion === "string" &&
+              typeof plugin.authorName === "string" &&
+              plugin.authorName.length <= 80 &&
+              safeUrl(plugin.discordMessage, ["discord.com"]) &&
+              safeArchiveUrl(plugin.downloadUrl),
+          );
+          const invite = safeUrl(data.discordInvite, ["discord.gg", "discord.com"]);
+          if (invite) {
+            discordTopLink.href = invite;
+            discordTopLink.classList.remove("hidden");
+          }
+          render();
+        })
+        .catch((error) => {
+          showEmpty(
+            "Catalogo non disponibile",
+            `Non è stato possibile caricare plugins.json (${error.message}). Riprova più tardi.`,
+            true,
+          );
+        });
+    </script>
+  </body>
+</html>

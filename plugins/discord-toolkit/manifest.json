@@ -1,0 +1,11 @@
+{
+  "id": "discord-toolkit",
+  "name": "Discord Toolkit",
+  "version": "0.1.0",
+  "description": "Utility per identificativi Discord e risorse ufficiali.",
+  "category": "Discord",
+  "apiVersion": 1,
+  "runtime": "python",
+  "entry": "discord.py",
+  "inputs": []
+}

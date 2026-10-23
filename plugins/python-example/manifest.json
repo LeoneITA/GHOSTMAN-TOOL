@@ -1,0 +1,19 @@
+{
+  "id": "python-example",
+  "name": "Esempio Python",
+  "version": "1.0.0",
+  "description": "Plugin di esempio che riceve testo e restituisce un risultato.",
+  "category": "Esempi",
+  "apiVersion": 1,
+  "runtime": "python",
+  "entry": "main.py",
+  "inputs": [
+    {
+      "name": "text",
+      "label": "Testo da analizzare",
+      "type": "text",
+      "required": true,
+      "placeholder": "Ciao GHOSTMAN"
+    }
+  ]
+}

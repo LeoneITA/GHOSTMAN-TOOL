@@ -1,0 +1,10 @@
+{
+  "id": "community",
+  "name": "Community Plugins",
+  "version": "1.0.0",
+  "description": "QUI TROVI TUTTI I PLUGIN DELLA COMMUNITY DI GHOSTMAN. SE VUOI AGGIUNGERE SCRIVI SU DISCORD.",
+  "category": "Community",
+  "apiVersion": 1,
+  "runtime": "html",
+  "entry": "index.html"
+}

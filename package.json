@@ -1,0 +1,68 @@
+{
+  "name": "ghostman",
+  "version": "1.1.8",
+  "description": "GHOSTMAN - Modular Desktop Toolkit",
+  "main": "src/main.js",
+  "author": "GHOSTMAN",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test",
+    "dist": "electron-builder --win nsis",
+    "dist:installer": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^39.0.0",
+    "electron-builder": "^26.0.12",
+    "yazl": "^3.3.1"
+  },
+  "build": {
+    "appId": "com.ghostman.desktop",
+    "productName": "GHOSTMAN",
+    "protocols": [
+      {
+        "name": "GHOSTMAN Community Plugin Installer",
+        "schemes": [
+          "ghostman"
+        ]
+      }
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "plugins",
+        "to": "plugins"
+      }
+    ],
+    "publish": {
+      "provider": "github",
+      "owner": "LeoneITA",
+      "repo": "GHOSTMAN-TOOL",
+      "releaseType": "release"
+    },
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "GHOSTMAN-Setup.exe"
+    }
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.9",
+    "node-unrar-js": "^2.0.2",
+    "qrcode": "^1.5.4",
+    "yauzl": "^3.4.0"
+  }
+}

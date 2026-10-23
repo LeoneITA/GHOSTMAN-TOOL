@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self';"
+    />
+    <meta name="referrer" content="no-referrer" />
+    <title>GHOSTMAN Mobile</title>
+    <link rel="stylesheet" href="mobile.css" />
+    <script src="mobile.js" defer></script>
+  </head>
+  <body>
+    <main class="mobile-shell">
+      <header class="mobile-header">
+        <div class="brand-mark">G</div>
+        <div>
+          <span class="eyebrow">PRIVATE TAILNET</span>
+          <h1>GHOSTMAN</h1>
+        </div>
+        <button id="logout-button" class="quiet-button hidden" type="button">
+          Esci
+        </button>
+      </header>
+
+      <section id="pairing-view" class="panel">
+        <span class="eyebrow">ASSOCIAZIONE DISPOSITIVO</span>
+        <h2>Collega questo telefono</h2>
+        <p>
+          Attendi la verifica del link temporaneo e dell'account Tailscale.
+        </p>
+        <button id="pair-button" class="primary-button hidden" type="button">
+          Associa dispositivo
+        </button>
+      </section>
+
+      <section id="tools-view" class="hidden">
+        <div class="panel status-panel">
+          <span class="eyebrow">PC CONNESSO</span>
+          <h2>Controllo remoto</h2>
+          <p>
+            I file abilitati possono essere visualizzati o scaricati sul
+            telefono. Avviare un programma o uno script sul PC richiede
+            conferma sul PC.
+          </p>
+        </div>
+        <section class="local-files-section">
+          <div class="section-heading">
+            <span class="eyebrow">FILE LOCALI · PC ASSOCIATO</span>
+            <h2>File locali</h2>
+            <p>
+              Sono file presenti solo sul PC associato, non file della
+              community. Immagini, PDF, testo e HTML con JavaScript inline
+              funzionano in un riquadro isolato senza accesso alla rete; gli
+              altri file possono essere scaricati sul telefono.
+            </p>
+          </div>
+          <div id="mobile-local-files" class="plugin-list"></div>
+        </section>
+        <section class="plugins-section">
+          <div class="section-heading">
+            <span class="eyebrow">PLUGIN</span>
+            <h2>Plugin autorizzati</h2>
+          </div>
+          <div id="mobile-plugins" class="plugin-list"></div>
+        </section>
+      </section>
+
+      <p id="mobile-message" class="message" role="status"></p>
+    </main>
+  </body>
+</html>
